@@ -10,31 +10,42 @@
   --bg:#0d1117;--surface:#161b22;--surface2:#1c2330;
   --border:#30363d;--accent:#2ea043;--accent2:#388bfd;
   --warn:#f78166;--warn-bg:#2d1a1a;--ok-bg:#1a2d1a;
-  --text:#e6edf3;--muted:#7d8590;--gold:#d29922;
+  --text:#e6edf3;--muted:#7d8590;--gold:#d29922;--qris:#a371f7;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-height:100vh;}
+
+/* LOGIN */
 #loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
 .login-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px 32px;width:100%;max-width:380px;text-align:center;}
 .login-logo{width:60px;height:60px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;margin:0 auto 20px;}
 .login-box h2{font-size:20px;font-weight:700;margin-bottom:6px;}
-.login-box p{font-size:13px;color:var(--muted);margin-bottom:28px;}
-.login-box input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:10px;font-family:'DM Mono',monospace;font-size:17px;outline:none;text-align:center;letter-spacing:.15em;text-transform:uppercase;margin-bottom:14px;transition:border-color .2s;}
+.login-box p{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.login-box input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:11px 14px;border-radius:10px;font-family:'DM Mono',monospace;font-size:15px;outline:none;text-align:center;letter-spacing:.1em;margin-bottom:10px;transition:border-color .2s;}
 .login-box input:focus{border-color:var(--accent2);}
 .login-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:10px;color:#fff;font-family:'Sora',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .2s;}
 .login-btn:hover{opacity:.88;}
-.login-error{margin-top:12px;background:var(--warn-bg);border:1px solid var(--warn);color:var(--warn);border-radius:8px;padding:9px 14px;font-size:12px;font-weight:600;display:none;}
-.login-hint{margin-top:18px;font-size:11px;color:var(--muted);line-height:1.8;}
+.login-error{margin-top:10px;background:var(--warn-bg);border:1px solid var(--warn);color:var(--warn);border-radius:8px;padding:9px 14px;font-size:12px;font-weight:600;display:none;}
+.login-loading{margin-top:10px;font-size:12px;color:var(--muted);display:none;}
+.login-hint{margin-top:16px;font-size:11px;color:var(--muted);line-height:1.8;}
+
+/* APP */
 #appScreen{display:none;}
 header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;}
 .logo-badge{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;}
 header h1{font-size:15px;font-weight:700;}
 header p{font-size:11px;color:var(--muted);}
-.role-chip{margin-left:auto;font-size:11px;padding:4px 12px;border-radius:20px;font-weight:700;letter-spacing:.05em;}
+.role-chip{margin-left:auto;font-size:11px;padding:4px 12px;border-radius:20px;font-weight:700;}
 .chip-spv{background:#1a2340;color:var(--accent2);border:1px solid var(--accent2);}
 .chip-slm{background:var(--ok-bg);color:var(--accent);border:1px solid var(--accent);}
+.back-btn{background:transparent;border:1px solid var(--accent2);color:var(--accent2);font-size:11px;padding:4px 10px;border-radius:7px;cursor:pointer;font-family:'Sora',sans-serif;font-weight:600;margin-left:8px;display:none;}
 .logout-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:11px;padding:4px 10px;border-radius:7px;cursor:pointer;font-family:'Sora',sans-serif;font-weight:600;margin-left:8px;}
 .logout-btn:hover{border-color:var(--warn);color:var(--warn);}
+
+.tabs{display:flex;gap:4px;background:var(--surface2);padding:6px;border-radius:12px;margin-bottom:16px;}
+.tab{flex:1;padding:9px;border:none;border-radius:9px;background:transparent;color:var(--muted);font-family:'Sora',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;}
+.tab.active{background:var(--surface);color:var(--text);}
+
 .container{max-width:700px;margin:0 auto;padding:20px 16px 60px;}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px;}
 .card h2{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
@@ -45,50 +56,107 @@ header p{font-size:11px;color:var(--muted);}
 .date-row input:focus{border-color:var(--accent2);}
 .field-group{margin-bottom:11px;}
 .field-group label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;}
-.field-group input[type="number"]{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;padding:9px 13px;outline:none;transition:border-color .15s;}
+.field-group input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;padding:9px 13px;outline:none;transition:border-color .15s;}
 .field-group input:focus{border-color:var(--accent2);}
+.field-group input.qris-inp:focus{border-color:var(--qris);}
 .field-preview{font-size:11px;color:var(--muted);margin-top:3px;font-family:'DM Mono',monospace;min-height:14px;}
 .sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .divider-lbl{font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin:13px 0 9px;display:flex;align-items:center;gap:8px;}
 .divider-lbl::after{content:'';flex:1;height:1px;background:var(--border);}
+.divider-lbl.qris-lbl{color:var(--qris);}
 .vmsg{margin-top:12px;padding:12px 14px;border-radius:9px;font-size:12px;font-weight:600;display:none;line-height:1.8;white-space:pre-line;}
 .vmsg.ok{display:block;background:var(--ok-bg);color:var(--accent);border:1px solid var(--accent);}
 .vmsg.err{display:block;background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn);}
 .vmsg.info{display:block;background:#1a2340;color:var(--accent2);border:1px solid var(--accent2);}
-.btn{padding:11px 20px;border-radius:10px;border:none;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s,transform .1s;}
+.btn{padding:10px 18px;border-radius:10px;border:none;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s,transform .1s;}
 .btn:active{transform:scale(.97);}
 .btn:hover{opacity:.85;}
 .btn-green{background:var(--accent);color:#fff;}
 .btn-blue{background:var(--accent2);color:#fff;}
+.btn-gold{background:var(--gold);color:#000;}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);}
 .btn-full{width:100%;text-align:center;}
 .actions-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+
+/* STATUS LIST */
 .slm-status-list{display:flex;flex-direction:column;gap:6px;}
-.slm-row{display:flex;align-items:center;background:var(--surface2);border-radius:8px;padding:10px 14px;font-size:12px;gap:8px;flex-wrap:wrap;}
+.slm-row{display:flex;align-items:center;background:var(--surface2);border-radius:8px;padding:10px 14px;font-size:12px;gap:8px;flex-wrap:wrap;cursor:pointer;transition:background .15s;}
+.slm-row:hover{background:#222d3d;}
 .slm-row .code{font-family:'DM Mono',monospace;font-weight:700;color:var(--accent2);min-width:42px;}
 .slm-row .name{color:var(--muted);flex:1;}
 .slm-row .amt{font-family:'DM Mono',monospace;font-size:11px;color:var(--text);}
 .st-ok{color:var(--accent);font-weight:700;white-space:nowrap;}
 .st-err{color:var(--warn);font-weight:700;white-space:nowrap;}
 .st-empty{color:var(--muted);font-style:italic;white-space:nowrap;}
+.tap-hint{font-size:10px;color:var(--muted);margin-top:6px;text-align:center;}
+
+/* REKAP TABLE */
 .rekap-table{width:100%;border-collapse:collapse;}
 .rekap-table td{padding:8px 4px;font-size:13px;border-bottom:1px solid var(--border);}
 .rekap-table tr:last-child td{border-bottom:none;}
 .rekap-table td:first-child{color:var(--muted);}
 .rekap-table td:last-child{font-family:'DM Mono',monospace;font-weight:600;text-align:right;}
 .rekap-table .tr-total td{color:var(--accent);font-weight:800;font-size:15px;}
+.rekap-table .tr-qris td{color:var(--qris);}
 .rekap-table .tr-warn td{color:var(--warn);}
 .overall-ok{background:var(--ok-bg);color:var(--accent);border:1px solid var(--accent);border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:13px;margin-top:14px;}
 .overall-err{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn);border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:13px;margin-top:14px;}
+
+/* RINCIAN LAPORAN */
+.rincian-header{background:var(--surface2);border-radius:12px;padding:16px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
+.rincian-avatar{width:46px;height:46px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;}
+.rincian-info h3{font-size:15px;font-weight:700;}
+.rincian-info p{font-size:12px;color:var(--muted);margin-top:2px;}
+.rincian-badge{margin-left:auto;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;}
+.badge-ok{background:var(--ok-bg);color:var(--accent);border:1px solid var(--accent);}
+.badge-err{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn);}
+.rincian-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.r-item{background:var(--surface2);border-radius:10px;padding:12px 14px;}
+.r-item .lbl{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+.r-item .val{font-family:'DM Mono',monospace;font-size:14px;font-weight:700;color:var(--text);}
+.r-item.r-qris .lbl{color:var(--qris);}
+.r-item.r-qris .val{color:var(--qris);}
+.r-item.r-total{grid-column:1/-1;background:var(--ok-bg);border:1px solid var(--accent);}
+.r-item.r-total .lbl{color:var(--accent);}
+.r-item.r-total .val{color:var(--accent);font-size:17px;}
+.r-item.r-warn{grid-column:1/-1;background:var(--warn-bg);border:1px solid var(--warn);}
+.r-item.r-warn .lbl{color:var(--warn);}
+.r-item.r-warn .val{color:var(--warn);}
+.r-divider{grid-column:1/-1;height:1px;background:var(--border);margin:4px 0;}
+
+/* MANAJEMEN SALESMAN */
+.slm-mgmt-list{display:flex;flex-direction:column;gap:8px;}
+.slm-mgmt-row{background:var(--surface2);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.slm-mgmt-row .info{flex:1;}
+.slm-mgmt-row .info .kode{font-family:'DM Mono',monospace;font-weight:700;color:var(--accent2);font-size:13px;}
+.slm-mgmt-row .info .nama{font-size:12px;color:var(--muted);margin-top:2px;}
+.slm-mgmt-row .btns{display:flex;gap:6px;}
+.btn-sm{padding:6px 12px;border-radius:7px;border:none;font-family:'Sora',sans-serif;font-size:11px;font-weight:700;cursor:pointer;}
+.btn-edit{background:var(--accent2);color:#fff;}
+.btn-del{background:var(--warn);color:#fff;}
+
 .output-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:18px 20px;font-family:'DM Mono',monospace;font-size:13px;line-height:2;white-space:pre-wrap;color:var(--text);display:none;position:relative;margin-top:16px;}
 .copy-btn{position:absolute;top:12px;right:12px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:12px;padding:5px 12px;border-radius:7px;cursor:pointer;font-family:'Sora',sans-serif;font-weight:700;}
 .copy-btn:hover{color:var(--accent);border-color:var(--accent);}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:center;justify-content:center;padding:16px;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px 20px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto;}
+.modal-box h3{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
+.modal-close{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:7px;cursor:pointer;font-family:'Sora',sans-serif;}
+
 .loading{text-align:center;padding:24px;color:var(--muted);font-size:13px;}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent2);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .saved-flash{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:10px 22px;border-radius:30px;font-size:13px;font-weight:700;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;}
 .saved-flash.show{opacity:1;}
-@media(max-width:500px){.sub-grid{grid-template-columns:1fr;}.actions-row{flex-direction:column;}.btn{width:100%;text-align:center;}}
+@media(max-width:500px){
+  .sub-grid{grid-template-columns:1fr;}
+  .rincian-grid{grid-template-columns:1fr;}
+  .r-item.r-total,.r-item.r-warn,.r-divider{grid-column:1/-1;}
+  .actions-row{flex-direction:column;}
+  .btn{width:100%;text-align:center;}
+}
 </style>
 </head>
 <body>
@@ -98,16 +166,15 @@ header p{font-size:11px;color:var(--muted);}
   <div class="login-box">
     <div class="login-logo">RC</div>
     <h2>Rekap Collection</h2>
-    <p>Masukkan kode salesman atau password supervisor</p>
-    <input type="text" id="loginCode" placeholder="Contoh: S005" maxlength="12"
+    <p>Masukkan kode dan password untuk login</p>
+    <input type="text" id="loginCode" placeholder="Kode (contoh: S005)" maxlength="12"
+      onkeydown="if(event.key==='Enter')document.getElementById('loginPass').focus()">
+    <input type="password" id="loginPass" placeholder="Password"
       onkeydown="if(event.key==='Enter')doLogin()">
     <button class="login-btn" onclick="doLogin()">Masuk</button>
-    <div class="login-error" id="loginError">Kode tidak dikenal. Coba lagi.</div>
-    <p class="login-hint">
-      Kode Salesman:<br>
-      S005 · S016 · S017 · S018 · S019 · S120 · S121<br><br>
-      Supervisor: gunakan password khusus
-    </p>
+    <div class="login-error" id="loginError">Kode atau password salah.</div>
+    <div class="login-loading" id="loginLoading"><span class="spinner"></span>Memverifikasi...</div>
+    <p class="login-hint">Login dengan kode &amp; password masing-masing<br>Supervisor: gunakan kode SPV</p>
   </div>
 </div>
 
@@ -117,9 +184,10 @@ header p{font-size:11px;color:var(--muted);}
     <div class="logo-badge">RC</div>
     <div>
       <h1 id="headerTitle">Rekap Collection</h1>
-      <p id="headerSub">—</p>
+      <p id="headerSub">&#8212;</p>
     </div>
     <span class="role-chip" id="roleChip"></span>
+    <button class="back-btn" id="backBtn" onclick="kembali()">&#8592; Kembali</button>
     <button class="logout-btn" onclick="doLogout()">Keluar</button>
   </header>
 
@@ -130,7 +198,7 @@ header p{font-size:11px;color:var(--muted);}
       <div class="card">
         <h2><span class="dot"></span>Laporan Collection Harian</h2>
         <div class="date-row">
-          <label>📅 Tanggal</label>
+          <label>&#128197; Tanggal</label>
           <input type="date" id="slmTgl">
         </div>
         <div class="field-group">
@@ -142,6 +210,12 @@ header p{font-size:11px;color:var(--muted);}
           <label>Transfer (Rp)</label>
           <input type="number" id="f_transfer" placeholder="0" oninput="previewRp('f_transfer','pv_transfer')">
           <div class="field-preview" id="pv_transfer"></div>
+        </div>
+        <div class="divider-lbl qris-lbl">&#128243; QRIS</div>
+        <div class="field-group">
+          <label style="color:var(--qris)">QRIS (Rp)</label>
+          <input type="number" id="f_qris" placeholder="0" class="qris-inp" oninput="previewRp('f_qris','pv_qris')">
+          <div class="field-preview" id="pv_qris"></div>
         </div>
         <div class="divider-lbl">Tunai</div>
         <div class="sub-grid">
@@ -174,94 +248,201 @@ header p{font-size:11px;color:var(--muted);}
         </div>
         <div class="vmsg" id="slmVmsg"></div>
         <div class="actions-row" style="margin-top:16px;">
-          <button class="btn btn-green btn-full" id="btnKirim" onclick="slmValidate()">🔄 Validasi &amp; Kirim</button>
+          <button class="btn btn-green btn-full" id="btnKirim" onclick="slmValidate()">&#128260; Validasi &amp; Kirim</button>
         </div>
       </div>
     </div>
 
     <!-- VIEW SUPERVISOR -->
     <div id="viewSpv" style="display:none">
-      <div class="card">
-        <h2><span class="dot"></span>Status Laporan Salesman</h2>
-        <div class="date-row">
-          <label>📅 Tanggal</label>
-          <input type="date" id="spvTgl" onchange="spvLoad()">
+      <div class="tabs">
+        <button class="tab active" id="tab1" onclick="switchTab(1)">&#128202; Rekap</button>
+        <button class="tab" id="tab2" onclick="switchTab(2)">&#128101; Salesman</button>
+        <button class="tab" id="tab3" onclick="switchTab(3)">&#9881;&#65039; Setting</button>
+      </div>
+
+      <!-- TAB 1 REKAP -->
+      <div id="tabContent1">
+        <!-- HALAMAN DAFTAR -->
+        <div id="halamanDaftar">
+          <div class="card">
+            <h2><span class="dot"></span>Status Laporan Salesman</h2>
+            <div class="date-row">
+              <label>&#128197; Tanggal</label>
+              <input type="date" id="spvTgl" onchange="spvLoad()">
+            </div>
+            <div class="slm-status-list" id="slmStatusList">
+              <div class="loading"><span class="spinner"></span>Memuat data...</div>
+            </div>
+            <p class="tap-hint">&#128070; Ketuk nama salesman untuk lihat rincian laporan</p>
+          </div>
+          <div class="card">
+            <h2><span class="dot"></span>Rekap Total</h2>
+            <table class="rekap-table" id="rekapTable"></table>
+            <div id="overallStatus"></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-ghost" onclick="spvLoad()">&#128260; Refresh</button>
+            <button class="btn btn-blue" onclick="generateWA()">&#128203; Generate Rekap WA</button>
+          </div>
+          <div class="output-box" id="outputBox">
+            <button class="copy-btn" onclick="copyOutput()">Copy</button>
+            <span id="outputText"></span>
+          </div>
         </div>
-        <div class="slm-status-list" id="slmStatusList">
-          <div class="loading"><span class="spinner"></span>Memuat data...</div>
+
+        <!-- HALAMAN RINCIAN LAPORAN -->
+        <div id="halamanRincian" style="display:none">
+          <div class="rincian-header">
+            <div class="rincian-avatar" id="rAvatar">&#8212;</div>
+            <div class="rincian-info">
+              <h3 id="rNama">&#8212;</h3>
+              <p id="rKode">&#8212;</p>
+              <p id="rTgl" style="margin-top:2px;font-size:11px;color:var(--muted)">&#8212;</p>
+            </div>
+            <span class="rincian-badge" id="rBadge">&#8212;</span>
+          </div>
+          <div class="card">
+            <h2><span class="dot"></span>Detail Laporan Collection</h2>
+            <div class="rincian-grid" id="rincianGrid"></div>
+          </div>
+          <div class="actions-row">
+            <button class="btn btn-ghost btn-full" onclick="kembali()">&#8592; Kembali ke Daftar</button>
+          </div>
         </div>
       </div>
-      <div class="card">
-        <h2><span class="dot"></span>Rekap Total 7 Salesman</h2>
-        <table class="rekap-table" id="rekapTable"></table>
-        <div id="overallStatus"></div>
+
+      <!-- TAB 2 SALESMAN -->
+      <div id="tabContent2" style="display:none">
+        <div class="card">
+          <h2><span class="dot"></span>Daftar Salesman</h2>
+          <div class="slm-mgmt-list" id="slmMgmtList">
+            <div class="loading"><span class="spinner"></span>Memuat...</div>
+          </div>
+          <div class="actions-row" style="margin-top:16px;">
+            <button class="btn btn-green btn-full" onclick="openModalTambah()">+ Tambah Salesman</button>
+          </div>
+        </div>
       </div>
-      <div class="actions-row">
-        <button class="btn btn-ghost" onclick="spvLoad()">🔄 Refresh</button>
-        <button class="btn btn-blue" onclick="generateWA()">📋 Generate Rekap WA</button>
-      </div>
-      <div class="output-box" id="outputBox">
-        <button class="copy-btn" onclick="copyOutput()">Copy</button>
-        <span id="outputText"></span>
+
+      <!-- TAB 3 SETTING -->
+      <div id="tabContent3" style="display:none">
+        <div class="card">
+          <h2><span class="dot"></span>Ganti Password Supervisor</h2>
+          <div class="field-group">
+            <label>Password Lama</label>
+            <input type="password" id="spvPassLama" placeholder="Password lama">
+          </div>
+          <div class="field-group">
+            <label>Password Baru</label>
+            <input type="password" id="spvPassBaru" placeholder="Password baru">
+          </div>
+          <div class="field-group">
+            <label>Konfirmasi Password Baru</label>
+            <input type="password" id="spvPassKonfirm" placeholder="Ulangi password baru">
+          </div>
+          <div class="vmsg" id="spvPassMsg"></div>
+          <div class="actions-row" style="margin-top:14px;">
+            <button class="btn btn-gold btn-full" onclick="gantiPassSpv()">&#128272; Simpan Password Baru</button>
+          </div>
+        </div>
       </div>
     </div>
 
   </div>
 </div>
 
-<div class="saved-flash" id="savedFlash">✓ Data terkirim ke server</div>
+<!-- MODAL TAMBAH/EDIT SALESMAN -->
+<div class="modal-overlay" id="modalSlm">
+  <div class="modal-box">
+    <h3>
+      <span id="modalSlmTitle">Tambah Salesman</span>
+      <button class="modal-close" onclick="closeModalSlm()">&#10005;</button>
+    </h3>
+    <div class="field-group">
+      <label>Kode Salesman</label>
+      <input type="text" id="ms_kode" placeholder="contoh: S005" style="text-transform:uppercase">
+    </div>
+    <div class="field-group">
+      <label>Nama Salesman</label>
+      <input type="text" id="ms_nama" placeholder="Nama lengkap">
+    </div>
+    <div class="field-group">
+      <label>Password</label>
+      <input type="password" id="ms_pass" placeholder="Password login salesman">
+    </div>
+    <div class="vmsg" id="modalSlmMsg"></div>
+    <div class="actions-row" style="margin-top:14px;">
+      <button class="btn btn-green btn-full" onclick="simpanSalesman()">&#128190; Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div class="saved-flash" id="savedFlash">&#10003; Tersimpan</div>
 
 <script>
-// ─── KONFIGURASI ───────────────────────────────────
-var SHEET_URL = 'https://script.google.com/macros/s/AKfycby_9ksAttazB36WbCCKSVrg-F8yI7hFSOzMYQjnu5D4N4oc8k9EgeRoMbQj8Dl_M3xe/exec';
-var SPV_PASSWORD = 'SPV2025';
-var SALESMAN = {
-  'S005':'Salesman S005','S016':'Salesman S016','S017':'Salesman S017',
-  'S018':'Salesman S018','S019':'Salesman S019','S120':'Salesman S120','S121':'Salesman S121'
-};
-var SLM_KEYS = Object.keys(SALESMAN);
-var FIELDS = ['giro','transfer','mb','nonmb','atmBca','brilink','sisaTunai'];
-// ──────────────────────────────────────────────────
+// ─── KONFIGURASI ────────────────────────────────────
+var SHEET_URL='https://script.google.com/macros/s/AKfycbxU6JAqmXErM-YCkzDaHcmtSOgwFnCIf33BsP_WYOJyZ7f5oKVVMCIgv4yQBfrMxLNk/exec';
+// ────────────────────────────────────────────────────
 
-var currentRole=null, currentCode=null;
+var currentRole=null,currentCode=null,currentNama=null;
+var slmList=[],editKodeTarget=null,lastDataMap={};
 
 function fmtRp(n){n=parseFloat(n)||0;return 'Rp '+Math.round(n).toLocaleString('id-ID');}
 function todayStr(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function fmtTglLong(v){
-  if(!v)return '—';
+  if(!v)return '&#8212;';
   var d=new Date(v+'T00:00:00');
   var dy=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
   var mo=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
   return dy[d.getDay()]+', '+d.getDate()+' '+mo[d.getMonth()]+' '+d.getFullYear();
 }
-function flashSaved(){var e=document.getElementById('savedFlash');e.classList.add('show');setTimeout(function(){e.classList.remove('show');},2500);}
+function flashSaved(){var e=document.getElementById('savedFlash');e.classList.add('show');setTimeout(function(){e.classList.remove('show');},2000);}
 function previewRp(iid,pid){
   var el=document.getElementById(iid);var pv=document.getElementById(pid);
   if(!el||!pv)return;
   var v=parseFloat(el.value)||0;pv.textContent=v>0?fmtRp(v):'';
 }
+function apiCall(params){
+  var qs=Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
+  return fetch(SHEET_URL+'?'+qs).then(function(r){return r.json();});
+}
 
-// ── LOGIN ──
+// LOGIN
 function doLogin(){
-  var raw=document.getElementById('loginCode').value.trim();
-  var code=raw.toUpperCase();
-  document.getElementById('loginError').style.display='none';
-  if(raw===SPV_PASSWORD||code===SPV_PASSWORD.toUpperCase()){
-    currentRole='spv';currentCode='SPV';showApp();
-  } else if(SALESMAN[code]){
-    currentRole='slm';currentCode=code;showApp();
-  } else {
-    document.getElementById('loginError').style.display='block';
-    document.getElementById('loginCode').value='';
-  }
+  var code=document.getElementById('loginCode').value.trim().toUpperCase();
+  var pass=document.getElementById('loginPass').value.trim();
+  var errEl=document.getElementById('loginError');
+  var loadEl=document.getElementById('loginLoading');
+  errEl.style.display='none';
+  if(!code||!pass){errEl.textContent='Isi kode dan password.';errEl.style.display='block';return;}
+  loadEl.style.display='block';
+  apiCall({action:'login',kode:code,pass:pass})
+  .then(function(res){
+    loadEl.style.display='none';
+    if(res.status==='ok'){
+      currentRole=res.role;currentCode=code;currentNama=res.nama||code;
+      if(res.role==='spv')slmList=res.salesman||[];
+      showApp();
+    } else {
+      errEl.textContent='Kode atau password salah.';errEl.style.display='block';
+      document.getElementById('loginPass').value='';
+    }
+  })
+  .catch(function(){
+    loadEl.style.display='none';
+    errEl.textContent='Tidak bisa terhubung. Cek internet.';errEl.style.display='block';
+  });
 }
 function doLogout(){
-  currentRole=null;currentCode=null;
+  currentRole=null;currentCode=null;currentNama=null;slmList=[];lastDataMap={};
   document.getElementById('loginCode').value='';
+  document.getElementById('loginPass').value='';
   document.getElementById('loginError').style.display='none';
   document.getElementById('appScreen').style.display='none';
   document.getElementById('viewSlm').style.display='none';
   document.getElementById('viewSpv').style.display='none';
+  document.getElementById('backBtn').style.display='none';
   document.getElementById('loginScreen').style.display='flex';
 }
 function showApp(){
@@ -270,90 +451,83 @@ function showApp(){
   var chip=document.getElementById('roleChip');
   if(currentRole==='spv'){
     document.getElementById('headerTitle').textContent='Dashboard Supervisor';
-    document.getElementById('headerSub').textContent='Rekap 7 Salesman — Real-time';
+    document.getElementById('headerSub').textContent='Rekap Salesman \u2014 Real-time';
     chip.className='role-chip chip-spv';chip.textContent='SUPERVISOR';
     document.getElementById('viewSpv').style.display='block';
     document.getElementById('spvTgl').value=todayStr();
-    spvLoad();
+    spvLoad();renderMgmt();
   } else {
     document.getElementById('headerTitle').textContent='Laporan Collection';
-    document.getElementById('headerSub').textContent=currentCode+' — '+SALESMAN[currentCode];
+    document.getElementById('headerSub').textContent=currentCode+' \u2014 '+currentNama;
     chip.className='role-chip chip-slm';chip.textContent=currentCode;
     document.getElementById('viewSlm').style.display='block';
     document.getElementById('slmTgl').value=todayStr();
   }
 }
 
-// ── VALIDASI ──
+// TABS
+function switchTab(n){
+  for(var i=1;i<=3;i++){
+    document.getElementById('tab'+i).classList.remove('active');
+    document.getElementById('tabContent'+i).style.display='none';
+  }
+  document.getElementById('tab'+n).classList.add('active');
+  document.getElementById('tabContent'+n).style.display='block';
+  if(n===2)renderMgmt();
+}
+
+// VALIDASI
 function runValidate(d,vmsgId,onValid){
   var tunai=d.mb+d.nonmb;
   var setor=d.atmBca+d.brilink+d.sisaTunai;
-  var totalCol=d.giro+d.transfer+tunai;
-  var totalSetor=d.giro+d.transfer+setor;
+  var totalCol=d.giro+d.transfer+d.qris+tunai;
+  var totalSetor=d.giro+d.transfer+d.qris+setor;
   var vmsg=document.getElementById(vmsgId);
   var errors=[];
-  var L='━━━━━━━━━━━━━━━━━━━━━━';
-  if(totalCol===0&&setor===0){vmsg.className='vmsg err';vmsg.textContent='⚠ Data masih kosong!\nIsi semua field terlebih dahulu.';return;}
-  if(tunai!==setor){var s1=Math.abs(tunai-setor);errors.push(L+'\n⚠ PERINGATAN 1\nMB+Non MB ≠ Setor+Sisa Tunai!\n\n  MB+Non MB              = '+fmtRp(tunai)+'\n  Setor BCA+BRILink\n  +Sisa Tunai ke SPO = '+fmtRp(setor)+'\n  Selisih = '+fmtRp(s1));}
-  if(setor>0&&tunai===0){errors.push(L+'\n⚠ PERINGATAN 2\nAda Setor/Sisa tapi\nMB dan Non MB = Rp 0!');}
-  if(setor>0&&totalCol>0&&totalSetor!==totalCol){var s3=Math.abs(totalSetor-totalCol);errors.push(L+'\n⚠ PERINGATAN 3\nGiro+Transfer+Setor+Sisa\n≠ Hasil Collection!\n\n  Total = '+fmtRp(totalSetor)+'\n  Collection = '+fmtRp(totalCol)+'\n  Selisih = '+fmtRp(s3));}
-  if(totalCol===0){errors.push(L+'\n⚠ PERINGATAN 4\nHasil Collection = Rp 0');}
-  if(errors.length>0){
-    vmsg.className='vmsg err';
-    vmsg.textContent='❌ TIDAK VALID! '+errors.length+' kesalahan:\n\n'+errors.join('\n\n')+'\n\n'+L+'\n🚫 Data BELUM terkirim.';
-    return;
-  }
+  var L='\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501';
+  if(totalCol===0&&setor===0){vmsg.className='vmsg err';vmsg.textContent='\u26a0 Data masih kosong!\nIsi semua field terlebih dahulu.';return;}
+  if(tunai!==setor){var s1=Math.abs(tunai-setor);errors.push(L+'\n\u26a0 PERINGATAN 1\nMB+Non MB \u2260 Setor+Sisa Tunai!\n\n  MB+Non MB = '+fmtRp(tunai)+'\n  Setor+Sisa = '+fmtRp(setor)+'\n  Selisih = '+fmtRp(s1));}
+  if(setor>0&&tunai===0){errors.push(L+'\n\u26a0 PERINGATAN 2\nAda Setor/Sisa tapi\nMB dan Non MB = Rp 0!');}
+  if(setor>0&&totalCol>0&&totalSetor!==totalCol){var s3=Math.abs(totalSetor-totalCol);errors.push(L+'\n\u26a0 PERINGATAN 3\nGiro+Transfer+QRIS+Setor+Sisa\n\u2260 Hasil Collection!\n  Selisih = '+fmtRp(s3));}
+  if(totalCol===0){errors.push(L+'\n\u26a0 PERINGATAN 4\nHasil Collection = Rp 0');}
+  if(errors.length>0){vmsg.className='vmsg err';vmsg.textContent='\u274c TIDAK VALID! '+errors.length+' kesalahan:\n\n'+errors.join('\n\n')+'\n\n'+L+'\n\u26ab Data BELUM terkirim.';return;}
   onValid(d,tunai,setor,totalCol);
 }
 
-// ── SALESMAN KIRIM ──
+// SALESMAN KIRIM
 function slmValidate(){
   var d={};
-  FIELDS.forEach(function(k){d[k]=parseFloat(document.getElementById('f_'+k).value)||0;});
+  ['giro','transfer','qris','mb','nonmb','atmBca','brilink','sisaTunai'].forEach(function(k){
+    d[k]=parseFloat(document.getElementById('f_'+k).value)||0;
+  });
   d.tgl=document.getElementById('slmTgl').value||todayStr();
-  d.kode=currentCode;
-  d.nama=SALESMAN[currentCode];
-
+  d.kode=currentCode;d.nama=currentNama;
   runValidate(d,'slmVmsg',function(data,tunai,setor,totalCol){
     var btn=document.getElementById('btnKirim');
     var vmsg=document.getElementById('slmVmsg');
-    btn.textContent='⏳ Mengirim...';
-    btn.disabled=true;
-    vmsg.className='vmsg info';
-    vmsg.textContent='⏳ Mengirim data ke server...';
-
-    // Kirim via GET dengan URL parameter (menghindari CORS)
-    var params='kode='+encodeURIComponent(data.kode)
-      +'&nama='+encodeURIComponent(data.nama)
-      +'&tgl='+encodeURIComponent(data.tgl)
-      +'&giro='+data.giro
-      +'&transfer='+data.transfer
-      +'&mb='+data.mb
-      +'&nonmb='+data.nonmb
-      +'&atmBca='+data.atmBca
-      +'&brilink='+data.brilink
-      +'&sisaTunai='+data.sisaTunai
-      +'&action=save';
-
-    fetch(SHEET_URL+'?'+params)
-    .then(function(r){return r.text();})
-    .then(function(txt){
-      btn.textContent='🔄 Validasi & Kirim';
-      btn.disabled=false;
-      vmsg.className='vmsg ok';
-      vmsg.textContent='✅ LAPORAN TERKIRIM!\n\n━━━━━━━━━━━━━━━━━━━━━━\nTotal Collection       : '+fmtRp(totalCol)+'\n  Giro                       : '+fmtRp(data.giro)+'\n  Transfer                 : '+fmtRp(data.transfer)+'\n  MB                          : '+fmtRp(data.mb)+'\n  Non MB                  : '+fmtRp(data.nonmb)+'\n\nSetor ATM BCA        : '+fmtRp(data.atmBca)+'\nSetor BRILink          : '+fmtRp(data.brilink)+'\nSisa Tunai ke SPO  : '+fmtRp(data.sisaTunai)+'\nTotal Setor+Sisa    : '+fmtRp(setor)+'\n\n✓ Semua angka cocok';
-      flashSaved();
+    btn.textContent='\u23f3 Mengirim...';btn.disabled=true;
+    vmsg.className='vmsg info';vmsg.textContent='\u23f3 Mengirim data ke server...';
+    var params={action:'saveData',kode:data.kode,nama:data.nama,tgl:data.tgl,
+      giro:data.giro,transfer:data.transfer,qris:data.qris,
+      mb:data.mb,nonmb:data.nonmb,atmBca:data.atmBca,brilink:data.brilink,sisaTunai:data.sisaTunai};
+    apiCall(params)
+    .then(function(res){
+      btn.textContent='\u23f3 Validasi & Kirim';btn.disabled=false;
+      if(res.status==='ok'){
+        vmsg.className='vmsg ok';
+        vmsg.textContent='\u2705 LAPORAN TERKIRIM!\n\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nTotal Collection : '+fmtRp(totalCol)+'\n  Giro                : '+fmtRp(data.giro)+'\n  Transfer          : '+fmtRp(data.transfer)+'\n  QRIS               : '+fmtRp(data.qris)+'\n  MB                   : '+fmtRp(data.mb)+'\n  Non MB           : '+fmtRp(data.nonmb)+'\n\nSetor ATM BCA  : '+fmtRp(data.atmBca)+'\nSetor BRILink    : '+fmtRp(data.brilink)+'\nSisa Tunai SPO : '+fmtRp(data.sisaTunai)+'\nTotal Setor+Sisa: '+fmtRp(setor)+'\n\n\u2713 Semua angka cocok';
+        flashSaved();
+      } else {vmsg.className='vmsg err';vmsg.textContent='\u274c Gagal kirim. Coba lagi.';}
     })
     .catch(function(){
-      btn.textContent='🔄 Validasi & Kirim';
-      btn.disabled=false;
-      vmsg.className='vmsg err';
-      vmsg.textContent='❌ Tidak bisa terhubung ke server.\nPastikan koneksi internet aktif lalu coba lagi.';
+      btn.textContent='\u23f3 Validasi & Kirim';btn.disabled=false;
+      document.getElementById('slmVmsg').className='vmsg err';
+      document.getElementById('slmVmsg').textContent='\u274c Tidak bisa terhubung.\nCek internet lalu coba lagi.';
     });
   });
 }
 
-// ── SUPERVISOR ──
+// SUPERVISOR LOAD
 function spvLoad(){
   var tgl=document.getElementById('spvTgl').value||todayStr();
   var list=document.getElementById('slmStatusList');
@@ -361,116 +535,265 @@ function spvLoad(){
   document.getElementById('rekapTable').innerHTML='';
   document.getElementById('overallStatus').textContent='';
   document.getElementById('outputBox').style.display='none';
-
-  fetch(SHEET_URL+'?tgl='+tgl)
-  .then(function(r){return r.json();})
+  apiCall({action:'getData',tgl:tgl})
   .then(function(res){
-    if(res.status!=='ok'){list.innerHTML='<div class="loading">❌ Gagal memuat. Coba refresh.</div>';return;}
-    renderSpv(res.data,tgl);
+    if(res.status!=='ok'){list.innerHTML='<div class="loading">\u274c Gagal memuat.</div>';return;}
+    if(res.salesman)slmList=res.salesman;
+    lastDataMap={};
+    (res.data||[]).forEach(function(d){lastDataMap[d.kode]=d;});
+    renderSpv(res.data||[],tgl);
   })
   .catch(function(){
-    list.innerHTML='<div class="loading">❌ Tidak bisa terhubung.<br>Cek koneksi lalu refresh.</div>';
+    list.innerHTML='<div class="loading">\u274c Tidak bisa terhubung.<br>Cek koneksi lalu refresh.</div>';
   });
 }
 
 function renderSpv(data,tgl){
   var list=document.getElementById('slmStatusList');
   list.innerHTML='';
-  var map={};
-  data.forEach(function(d){map[d.kode]=d;});
-  var tot={giro:0,transfer:0,mb:0,nonmb:0,atmBca:0,brilink:0,sisaTunai:0};
+  var map={};data.forEach(function(d){map[d.kode]=d;});
+  var tot={giro:0,transfer:0,qris:0,mb:0,nonmb:0,atmBca:0,brilink:0,sisaTunai:0};
   var countValid=0,errorNames=[],pendingNames=[];
+  var fields=['giro','transfer','qris','mb','nonmb','atmBca','brilink','sisaTunai'];
 
-  SLM_KEYS.forEach(function(code){
-    var d=map[code];
-    var row=document.createElement('div');
-    row.className='slm-row';
+  slmList.forEach(function(slm){
+    var d=map[slm.kode];
+    var row=document.createElement('div');row.className='slm-row';
     if(!d){
-      pendingNames.push(code);
-      row.innerHTML='<span class="code">'+code+'</span><span class="name">'+SALESMAN[code]+'</span><span class="st-empty">Belum lapor</span>';
+      pendingNames.push(slm.kode);
+      row.innerHTML='<span class="code">'+slm.kode+'</span><span class="name">'+slm.nama+'</span><span class="st-empty">Belum lapor</span>';
+      row.style.cursor='default';
     } else {
       var tunai=(parseFloat(d.mb)||0)+(parseFloat(d.nonmb)||0);
       var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.sisaTunai)||0);
-      var totalCol=(parseFloat(d.giro)||0)+(parseFloat(d.transfer)||0)+tunai;
+      var totalCol=(parseFloat(d.giro)||0)+(parseFloat(d.transfer)||0)+(parseFloat(d.qris)||0)+tunai;
       if(tunai===setor){
         countValid++;
-        FIELDS.forEach(function(k){tot[k]+=parseFloat(d[k])||0;});
-        row.innerHTML='<span class="code">'+code+'</span><span class="name">'+SALESMAN[code]+'</span><span class="amt">'+fmtRp(totalCol)+'</span><span class="st-ok">✓ Valid</span>';
+        fields.forEach(function(k){tot[k]+=parseFloat(d[k])||0;});
+        row.innerHTML='<span class="code">'+slm.kode+'</span><span class="name">'+slm.nama+'</span><span class="amt">'+fmtRp(totalCol)+'</span><span class="st-ok">\u2713 Valid &#10095;</span>';
       } else {
-        errorNames.push(code);
-        row.innerHTML='<span class="code">'+code+'</span><span class="name">'+SALESMAN[code]+'</span><span class="st-err">⚠ Selisih '+fmtRp(Math.abs((parseFloat(d.mb)||0)+(parseFloat(d.nonmb)||0)-setor))+'</span>';
+        errorNames.push(slm.kode);
+        row.innerHTML='<span class="code">'+slm.kode+'</span><span class="name">'+slm.nama+'</span><span class="st-err">\u26a0 Selisih '+fmtRp(Math.abs(tunai-setor))+' &#10095;</span>';
       }
+      (function(kode,nama,tgl){
+        row.onclick=function(){lihatRincian(kode,nama,tgl);};
+      })(slm.kode,slm.nama,tgl);
     }
     list.appendChild(row);
   });
 
   var tunaiTot=tot.mb+tot.nonmb;
   var setorTot=tot.atmBca+tot.brilink+tot.sisaTunai;
-  var totalCol=tot.giro+tot.transfer+tunaiTot;
+  var totalCol=tot.giro+tot.transfer+tot.qris+tunaiTot;
   var selisih=tunaiTot-setorTot;
+  var total=slmList.length;
 
   document.getElementById('rekapTable').innerHTML=
-    '<tr class="tr-total"><td>Total Collection ('+countValid+'/7 Slm)</td><td>'+fmtRp(totalCol)+'</td></tr>'+
-    '<tr><td>&nbsp;— Giro</td><td>'+fmtRp(tot.giro)+'</td></tr>'+
-    '<tr><td>&nbsp;— Transfer</td><td>'+fmtRp(tot.transfer)+'</td></tr>'+
-    '<tr><td>&nbsp;— Tunai (MB+Non MB)</td><td>'+fmtRp(tunaiTot)+'</td></tr>'+
-    '<tr><td>&nbsp;&nbsp;&nbsp;• MB</td><td>'+fmtRp(tot.mb)+'</td></tr>'+
-    '<tr><td>&nbsp;&nbsp;&nbsp;• Non MB</td><td>'+fmtRp(tot.nonmb)+'</td></tr>'+
+    '<tr class="tr-total"><td>Total Collection ('+countValid+'/'+total+' Slm)</td><td>'+fmtRp(totalCol)+'</td></tr>'+
+    '<tr><td>&nbsp;\u2014 Giro</td><td>'+fmtRp(tot.giro)+'</td></tr>'+
+    '<tr><td>&nbsp;\u2014 Transfer</td><td>'+fmtRp(tot.transfer)+'</td></tr>'+
+    '<tr class="tr-qris"><td>&nbsp;\u2014 QRIS</td><td>'+fmtRp(tot.qris)+'</td></tr>'+
+    '<tr><td>&nbsp;\u2014 Tunai (MB+Non MB)</td><td>'+fmtRp(tunaiTot)+'</td></tr>'+
+    '<tr><td>&nbsp;&nbsp;&nbsp;\u2022 MB</td><td>'+fmtRp(tot.mb)+'</td></tr>'+
+    '<tr><td>&nbsp;&nbsp;&nbsp;\u2022 Non MB</td><td>'+fmtRp(tot.nonmb)+'</td></tr>'+
     '<tr><td colspan="2" style="padding:4px 0"><hr style="border-color:var(--border)"></td></tr>'+
     '<tr><td>Setor ATM BCA</td><td>'+fmtRp(tot.atmBca)+'</td></tr>'+
     '<tr><td>Setor BRILink</td><td>'+fmtRp(tot.brilink)+'</td></tr>'+
     '<tr><td>Sisa Tunai ke SPO</td><td>'+fmtRp(tot.sisaTunai)+'</td></tr>'+
     '<tr><td><b>Total Setor+Sisa</b></td><td><b>'+fmtRp(setorTot)+'</b></td></tr>'+
-    (selisih!==0?'<tr class="tr-warn"><td>⚠ SELISIH TUNAI</td><td>'+fmtRp(Math.abs(selisih))+'</td></tr>':'');
+    (selisih!==0?'<tr class="tr-warn"><td>\u26a0 SELISIH TUNAI</td><td>'+fmtRp(Math.abs(selisih))+'</td></tr>':'');
 
-  var allOk=countValid===7&&errorNames.length===0&&selisih===0;
+  var allOk=countValid===total&&errorNames.length===0&&selisih===0;
   var ovEl=document.getElementById('overallStatus');
-  if(allOk){ovEl.className='overall-ok';ovEl.textContent='✅ SEMUA DATA VALID — Rekap siap dikirim';}
+  if(allOk){ovEl.className='overall-ok';ovEl.textContent='\u2705 SEMUA DATA VALID \u2014 Rekap siap dikirim';}
   else{
     var parts=[];
     if(pendingNames.length)parts.push(pendingNames.length+' belum lapor');
     if(errorNames.length)parts.push(errorNames.length+' ada selisih');
-    ovEl.className='overall-err';ovEl.textContent='❌ '+parts.join(' · ')+' — Cek salesman terkait';
+    ovEl.className='overall-err';ovEl.textContent='\u274c '+parts.join(' \u00b7 ')+' \u2014 Ketuk nama untuk lihat rincian';
   }
 }
 
+// RINCIAN LAPORAN SALESMAN
+function lihatRincian(kode,nama,tgl){
+  var d=lastDataMap[kode];
+  if(!d)return;
+  var tunai=(parseFloat(d.mb)||0)+(parseFloat(d.nonmb)||0);
+  var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.sisaTunai)||0);
+  var qris=parseFloat(d.qris)||0;
+  var totalCol=(parseFloat(d.giro)||0)+(parseFloat(d.transfer)||0)+qris+tunai;
+  var valid=(tunai===setor);
+  var selisih=Math.abs(tunai-setor);
+
+  document.getElementById('rAvatar').textContent=kode.substring(0,2);
+  document.getElementById('rNama').textContent=nama;
+  document.getElementById('rKode').textContent='Kode: '+kode;
+  document.getElementById('rTgl').textContent='Tanggal: '+fmtTglLong(tgl);
+
+  var badge=document.getElementById('rBadge');
+  if(valid){badge.className='rincian-badge badge-ok';badge.textContent='\u2713 Valid';}
+  else{badge.className='rincian-badge badge-err';badge.textContent='\u26a0 Ada Selisih';}
+
+  var grid=document.getElementById('rincianGrid');
+  grid.innerHTML=
+    '<div class="r-item r-total"><div class="lbl">Total Collection</div><div class="val">'+fmtRp(totalCol)+'</div></div>'+
+    '<div class="r-divider"></div>'+
+    '<div class="r-item"><div class="lbl">Giro</div><div class="val">'+fmtRp(d.giro)+'</div></div>'+
+    '<div class="r-item"><div class="lbl">Transfer</div><div class="val">'+fmtRp(d.transfer)+'</div></div>'+
+    '<div class="r-item r-qris"><div class="lbl">&#128243; QRIS</div><div class="val">'+fmtRp(qris)+'</div></div>'+
+    '<div class="r-item"><div class="lbl">MB</div><div class="val">'+fmtRp(d.mb)+'</div></div>'+
+    '<div class="r-item"><div class="lbl">Non MB</div><div class="val">'+fmtRp(d.nonmb)+'</div></div>'+
+    '<div class="r-item"><div class="lbl">Total Tunai (MB+Non MB)</div><div class="val">'+fmtRp(tunai)+'</div></div>'+
+    '<div class="r-divider"></div>'+
+    '<div class="r-item"><div class="lbl">Setor ATM BCA</div><div class="val">'+fmtRp(d.atmBca)+'</div></div>'+
+    '<div class="r-item"><div class="lbl">Setor BRILink</div><div class="val">'+fmtRp(d.brilink)+'</div></div>'+
+    '<div class="r-item"><div class="lbl">Sisa Tunai ke SPO</div><div class="val">'+fmtRp(d.sisaTunai)+'</div></div>'+
+    '<div class="r-item"><div class="lbl">Total Setor+Sisa</div><div class="val">'+fmtRp(setor)+'</div></div>'+
+    (valid?'':'<div class="r-item r-warn"><div class="lbl">\u26a0 SELISIH TUNAI</div><div class="val">'+fmtRp(selisih)+'</div></div>');
+
+  document.getElementById('halamanDaftar').style.display='none';
+  document.getElementById('halamanRincian').style.display='block';
+  document.getElementById('backBtn').style.display='inline-block';
+  window.scrollTo(0,0);
+}
+
+function kembali(){
+  document.getElementById('halamanRincian').style.display='none';
+  document.getElementById('halamanDaftar').style.display='block';
+  document.getElementById('backBtn').style.display='none';
+}
+
+// GENERATE WA
 function generateWA(){
   var tgl=document.getElementById('spvTgl').value||todayStr();
-  fetch(SHEET_URL+'?tgl='+tgl)
-  .then(function(r){return r.json();})
+  apiCall({action:'getData',tgl:tgl})
   .then(function(res){
     if(res.status!=='ok')return;
-    var map={};res.data.forEach(function(d){map[d.kode]=d;});
-    var tot={giro:0,transfer:0,mb:0,nonmb:0,atmBca:0,brilink:0,sisaTunai:0};
+    if(res.salesman)slmList=res.salesman;
+    var map={};(res.data||[]).forEach(function(d){map[d.kode]=d;});
+    var tot={giro:0,transfer:0,qris:0,mb:0,nonmb:0,atmBca:0,brilink:0,sisaTunai:0};
     var errorNames=[],pendingNames=[],validCount=0;
-    SLM_KEYS.forEach(function(code){
-      var d=map[code];
-      if(!d){pendingNames.push(code);return;}
+    var fields=['giro','transfer','qris','mb','nonmb','atmBca','brilink','sisaTunai'];
+    slmList.forEach(function(slm){
+      var d=map[slm.kode];
+      if(!d){pendingNames.push(slm.kode);return;}
       var tunai=(parseFloat(d.mb)||0)+(parseFloat(d.nonmb)||0);
       var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.sisaTunai)||0);
-      if(tunai===setor){validCount++;FIELDS.forEach(function(k){tot[k]+=parseFloat(d[k])||0;});}
-      else{errorNames.push(code);}
+      if(tunai===setor){validCount++;fields.forEach(function(k){tot[k]+=parseFloat(d[k])||0;});}
+      else{errorNames.push(slm.kode);}
     });
     var tunai=tot.mb+tot.nonmb;
     var setor=tot.atmBca+tot.brilink+tot.sisaTunai;
-    var totalCol=tot.giro+tot.transfer+tunai;
-    var out='Laporan Collection\n\nHasil Collection Supervisor :\nTanggal : '+fmtTglLong(tgl)+'\nHasil collection ('+validCount+' Salesman) : '+fmtRp(totalCol)+'\n\nGiro         : '+fmtRp(tot.giro)+'\nTransfer : '+fmtRp(tot.transfer)+'\n\nTunai\n- MB          = '+fmtRp(tot.mb)+'\n- Non MB = '+fmtRp(tot.nonmb)+'\n\nSetor ATM BCA      : '+fmtRp(tot.atmBca)+'\nSetor BRILink        : '+fmtRp(tot.brilink)+'\nSisa Tunai ke SPO : '+fmtRp(tot.sisaTunai);
-    var issues=[].concat(pendingNames.map(function(c){return '• '+c+' (belum lapor)';}),errorNames.map(function(c){return '• '+c+' (ada selisih)';}));
-    out+=issues.length?'\n\n⚠ *PERHATIAN*\nSalesman perlu kirim ulang / segera lapor:\n'+issues.join('\n')+'\n\nTerimakasih':'\n\nTerimakasih';
-    var box=document.getElementById('outputBox');
-    box.style.display='block';
+    var totalCol=tot.giro+tot.transfer+tot.qris+tunai;
+    var out='Laporan Collection\n\nHasil Collection Supervisor :\nTanggal : '+fmtTglLong(tgl)+'\nHasil collection ('+validCount+' Salesman) : '+fmtRp(totalCol)+
+      '\n\nGiro         : '+fmtRp(tot.giro)+
+      '\nTransfer : '+fmtRp(tot.transfer)+
+      '\nQRIS       : '+fmtRp(tot.qris)+
+      '\n\nTunai\n- MB          = '+fmtRp(tot.mb)+'\n- Non MB = '+fmtRp(tot.nonmb)+
+      '\n\nSetor ATM BCA      : '+fmtRp(tot.atmBca)+
+      '\nSetor BRILink        : '+fmtRp(tot.brilink)+
+      '\nSisa Tunai ke SPO : '+fmtRp(tot.sisaTunai);
+    var issues=[].concat(
+      pendingNames.map(function(c){return '\u2022 '+c+' (belum lapor)';}),
+      errorNames.map(function(c){return '\u2022 '+c+' (ada selisih)';})
+    );
+    out+=issues.length?'\n\n\u26a0 *PERHATIAN*\nSalesman perlu kirim ulang / segera lapor:\n'+issues.join('\n')+'\n\nTerimakasih':'\n\nTerimakasih';
+    var box=document.getElementById('outputBox');box.style.display='block';
     document.getElementById('outputText').textContent=out;
     box.scrollIntoView({behavior:'smooth',block:'start'});
   });
 }
-
 function copyOutput(){
   navigator.clipboard.writeText(document.getElementById('outputText').textContent).then(function(){
     var btn=document.querySelector('.copy-btn');
-    btn.textContent='✓ Tersalin!';btn.style.color='var(--accent)';
+    btn.textContent='\u2713 Tersalin!';btn.style.color='var(--accent)';
     setTimeout(function(){btn.textContent='Copy';btn.style.color='';},2000);
   });
 }
+
+// MANAJEMEN SALESMAN
+function renderMgmt(){
+  apiCall({action:'getSalesman'})
+  .then(function(res){
+    if(res.status==='ok')slmList=res.salesman||[];
+    var list=document.getElementById('slmMgmtList');list.innerHTML='';
+    if(slmList.length===0){list.innerHTML='<div class="loading">Belum ada salesman.</div>';return;}
+    slmList.forEach(function(slm){
+      var row=document.createElement('div');row.className='slm-mgmt-row';
+      row.innerHTML='<div class="info"><div class="kode">'+slm.kode+'</div><div class="nama">'+slm.nama+'</div></div>'+
+        '<div class="btns"><button class="btn-sm btn-edit" onclick="openModalEdit(\''+slm.kode+'\',\''+slm.nama+'\')">&#9999;&#65039; Edit</button>'+
+        '<button class="btn-sm btn-del" onclick="hapusSalesman(\''+slm.kode+'\')">&#128465;</button></div>';
+      list.appendChild(row);
+    });
+  })
+  .catch(function(){document.getElementById('slmMgmtList').innerHTML='<div class="loading">\u274c Gagal memuat.</div>';});
+}
+function openModalTambah(){
+  editKodeTarget=null;
+  document.getElementById('modalSlmTitle').textContent='Tambah Salesman';
+  document.getElementById('ms_kode').value='';document.getElementById('ms_kode').readOnly=false;
+  document.getElementById('ms_nama').value='';document.getElementById('ms_pass').value='';
+  document.getElementById('ms_pass').placeholder='Password login salesman';
+  document.getElementById('modalSlmMsg').className='vmsg';
+  document.getElementById('modalSlm').classList.add('show');
+}
+function openModalEdit(kode,nama){
+  editKodeTarget=kode;
+  document.getElementById('modalSlmTitle').textContent='Edit: '+kode;
+  document.getElementById('ms_kode').value=kode;document.getElementById('ms_kode').readOnly=true;
+  document.getElementById('ms_nama').value=nama;document.getElementById('ms_pass').value='';
+  document.getElementById('ms_pass').placeholder='Kosongkan jika tidak ganti password';
+  document.getElementById('modalSlmMsg').className='vmsg';
+  document.getElementById('modalSlm').classList.add('show');
+}
+function closeModalSlm(){document.getElementById('modalSlm').classList.remove('show');}
+function simpanSalesman(){
+  var kode=document.getElementById('ms_kode').value.trim().toUpperCase();
+  var nama=document.getElementById('ms_nama').value.trim();
+  var pass=document.getElementById('ms_pass').value.trim();
+  var msg=document.getElementById('modalSlmMsg');
+  if(!kode||!nama){msg.className='vmsg err';msg.textContent='Kode dan nama wajib diisi.';return;}
+  if(!editKodeTarget&&!pass){msg.className='vmsg err';msg.textContent='Password wajib diisi untuk salesman baru.';return;}
+  msg.className='vmsg info';msg.textContent='\u23f3 Menyimpan...';
+  var params={action:editKodeTarget?'editSalesman':'tambahSalesman',kode:kode,nama:nama};
+  if(pass)params.pass=pass;
+  apiCall(params)
+  .then(function(res){
+    if(res.status==='ok'){msg.className='vmsg ok';msg.textContent='\u2705 Berhasil!';flashSaved();setTimeout(function(){closeModalSlm();renderMgmt();},1000);}
+    else{msg.className='vmsg err';msg.textContent='\u274c '+(res.msg||'Gagal.');}
+  })
+  .catch(function(){msg.className='vmsg err';msg.textContent='\u274c Tidak bisa terhubung.';});
+}
+function hapusSalesman(kode){
+  if(!confirm('Hapus salesman '+kode+'?'))return;
+  apiCall({action:'hapusSalesman',kode:kode})
+  .then(function(res){if(res.status==='ok'){flashSaved();renderMgmt();}else{alert('Gagal: '+(res.msg||''));}});
+}
+
+// GANTI PASSWORD SPV
+function gantiPassSpv(){
+  var lama=document.getElementById('spvPassLama').value.trim();
+  var baru=document.getElementById('spvPassBaru').value.trim();
+  var konfirm=document.getElementById('spvPassKonfirm').value.trim();
+  var msg=document.getElementById('spvPassMsg');
+  if(!lama||!baru||!konfirm){msg.className='vmsg err';msg.textContent='Semua field wajib diisi.';return;}
+  if(baru!==konfirm){msg.className='vmsg err';msg.textContent='Password baru tidak cocok.';return;}
+  if(baru.length<4){msg.className='vmsg err';msg.textContent='Password minimal 4 karakter.';return;}
+  msg.className='vmsg info';msg.textContent='\u23f3 Menyimpan...';
+  apiCall({action:'gantiPassSpv',passLama:lama,passBaru:baru})
+  .then(function(res){
+    if(res.status==='ok'){
+      msg.className='vmsg ok';msg.textContent='\u2705 Password berhasil diganti!';
+      document.getElementById('spvPassLama').value='';
+      document.getElementById('spvPassBaru').value='';
+      document.getElementById('spvPassKonfirm').value='';
+      flashSaved();
+    } else {msg.className='vmsg err';msg.textContent='\u274c '+(res.msg||'Password lama salah.');}
+  })
+  .catch(function(){msg.className='vmsg err';msg.textContent='\u274c Tidak bisa terhubung.';});
+}
+
+document.getElementById('modalSlm').addEventListener('click',function(e){if(e.target===this)closeModalSlm();});
 </script>
 </body>
 </html>
