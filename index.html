@@ -259,6 +259,11 @@ header p{font-size:11px;color:var(--muted);}
           <div class="field-preview" id="pv_bsi"></div>
         </div>
         <div class="field-group">
+          <label>Setor ATM MANDIRI (Rp)</label>
+          <input type="number" id="f_mandiri" placeholder="0" oninput="previewRp('f_mandiri','pv_mandiri')">
+          <div class="field-preview" id="pv_mandiri"></div>
+        </div>
+        <div class="field-group">
           <label>Sisa Tunai ke SPO (Rp)</label>
           <input type="number" id="f_sisaTunai" placeholder="0" oninput="previewRp('f_sisaTunai','pv_sisaTunai')">
           <div class="field-preview" id="pv_sisaTunai"></div>
@@ -496,7 +501,7 @@ function switchTab(n){
 // VALIDASI
 function runValidate(d,vmsgId,onValid){
   var tunai=d.mb+d.nonmb;
-  var setor=d.atmBca+d.brilink+d.inna+d.bsi+d.sisaTunai;
+  var setor=d.atmBca+d.brilink+d.inna+d.bsi+d.mandiri+d.sisaTunai;
   var totalCol=d.giro+d.transfer+d.qris+tunai;
   var totalSetor=d.giro+d.transfer+d.qris+setor;
   var vmsg=document.getElementById(vmsgId);
@@ -514,7 +519,7 @@ function runValidate(d,vmsgId,onValid){
 // SALESMAN KIRIM
 function slmValidate(){
   var d={};
-  ['giro','transfer','qris','tokoQris','mb','nonmb','atmBca','brilink','inna','bsi','sisaTunai'].forEach(function(k){
+  ['giro','transfer','qris','tokoQris','mb','nonmb','atmBca','brilink','inna','bsi','mandiri','sisaTunai'].forEach(function(k){
     d[k]=parseFloat(document.getElementById('f_'+k).value)||0;
   });
   d.tgl=document.getElementById('slmTgl').value||todayStr();
@@ -527,7 +532,7 @@ function slmValidate(){
     var params={action:'saveData',kode:data.kode,nama:data.nama,tgl:data.tgl,
       giro:data.giro,transfer:data.transfer,qris:data.qris,tokoQris:data.tokoQris,
       mb:data.mb,nonmb:data.nonmb,atmBca:data.atmBca,brilink:data.brilink,
-      inna:data.inna,bsi:data.bsi,sisaTunai:data.sisaTunai};
+      inna:data.inna,bsi:data.bsi,mandiri:data.mandiri,sisaTunai:data.sisaTunai};
     apiCall(params)
     .then(function(res){
       btn.textContent='\u23f3 Validasi & Kirim';btn.disabled=false;
@@ -570,9 +575,9 @@ function renderSpv(data,tgl){
   var list=document.getElementById('slmStatusList');
   list.innerHTML='';
   var map={};data.forEach(function(d){map[d.kode]=d;});
-  var tot={giro:0,transfer:0,qris:0,tokoQris:0,mb:0,nonmb:0,atmBca:0,brilink:0,inna:0,bsi:0,sisaTunai:0};
+  var tot={giro:0,transfer:0,qris:0,tokoQris:0,mb:0,nonmb:0,atmBca:0,brilink:0,inna:0,bsi:0,mandiri:0,sisaTunai:0};
   var countValid=0,errorNames=[],pendingNames=[];
-  var fields=['giro','transfer','qris','tokoQris','mb','nonmb','atmBca','brilink','inna','bsi','sisaTunai'];
+  var fields=['giro','transfer','qris','tokoQris','mb','nonmb','atmBca','brilink','inna','bsi','mandiri','sisaTunai'];
 
   slmList.forEach(function(slm){
     var d=map[slm.kode];
@@ -583,7 +588,7 @@ function renderSpv(data,tgl){
       row.style.cursor='default';
     } else {
       var tunai=(parseFloat(d.mb)||0)+(parseFloat(d.nonmb)||0);
-      var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.inna)||0)+(parseFloat(d.bsi)||0)+(parseFloat(d.sisaTunai)||0);
+      var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.inna)||0)+(parseFloat(d.bsi)||0)+(parseFloat(d.mandiri)||0)+(parseFloat(d.sisaTunai)||0);
       var totalCol=(parseFloat(d.giro)||0)+(parseFloat(d.transfer)||0)+(parseFloat(d.qris)||0)+tunai;
       if(tunai===setor){
         countValid++;
@@ -601,7 +606,7 @@ function renderSpv(data,tgl){
   });
 
   var tunaiTot=tot.mb+tot.nonmb;
-  var setorTot=tot.atmBca+tot.brilink+tot.inna+tot.bsi+tot.sisaTunai;
+  var setorTot=tot.atmBca+tot.brilink+tot.inna+tot.bsi+tot.mandiri+tot.sisaTunai;
   var totalCol=tot.giro+tot.transfer+tot.qris+tunaiTot;
   var selisih=tunaiTot-setorTot;
   var total=slmList.length;
@@ -619,6 +624,7 @@ function renderSpv(data,tgl){
     '<tr><td>Setor BRILink</td><td>'+fmtRp(tot.brilink)+'</td></tr>'+
     '<tr><td>Setor ATM INNA</td><td>'+fmtRp(tot.inna)+'</td></tr>'+
     '<tr><td>Setor ATM/Link BSI</td><td>'+fmtRp(tot.bsi)+'</td></tr>'+
+    '<tr><td>Setor ATM MANDIRI</td><td>'+fmtRp(tot.mandiri)+'</td></tr>'+
     '<tr><td>Sisa Tunai ke SPO</td><td>'+fmtRp(tot.sisaTunai)+'</td></tr>'+
     '<tr><td><b>Total Setor+Sisa</b></td><td><b>'+fmtRp(setorTot)+'</b></td></tr>'+
     (selisih!==0?'<tr class="tr-warn"><td>\u26a0 SELISIH TUNAI</td><td>'+fmtRp(Math.abs(selisih))+'</td></tr>':'');
@@ -639,7 +645,7 @@ function lihatRincian(kode,nama,tgl){
   var d=lastDataMap[kode];
   if(!d)return;
   var tunai=(parseFloat(d.mb)||0)+(parseFloat(d.nonmb)||0);
-  var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.inna)||0)+(parseFloat(d.bsi)||0)+(parseFloat(d.sisaTunai)||0);
+  var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.inna)||0)+(parseFloat(d.bsi)||0)+(parseFloat(d.mandiri)||0)+(parseFloat(d.sisaTunai)||0);
   var qris=parseFloat(d.qris)||0;
   var totalCol=(parseFloat(d.giro)||0)+(parseFloat(d.transfer)||0)+qris+tunai;
   var valid=(tunai===setor);
@@ -670,6 +676,7 @@ function lihatRincian(kode,nama,tgl){
     '<div class="r-item"><div class="lbl">Setor BRILink</div><div class="val">'+fmtRp(d.brilink)+'</div></div>'+
     '<div class="r-item"><div class="lbl">Setor ATM INNA</div><div class="val">'+fmtRp(d.inna||0)+'</div></div>'+
     '<div class="r-item"><div class="lbl">Setor ATM/Link BSI</div><div class="val">'+fmtRp(d.bsi||0)+'</div></div>'+
+    '<div class="r-item"><div class="lbl">Setor ATM MANDIRI</div><div class="val">'+fmtRp(d.mandiri||0)+'</div></div>'+
     '<div class="r-item"><div class="lbl">Sisa Tunai ke SPO</div><div class="val">'+fmtRp(d.sisaTunai)+'</div></div>'+
     '<div class="r-item"><div class="lbl">Total Setor+Sisa</div><div class="val">'+fmtRp(setor)+'</div></div>'+
     (valid?'':'<div class="r-item r-warn"><div class="lbl">\u26a0 SELISIH TUNAI</div><div class="val">'+fmtRp(selisih)+'</div></div>');
@@ -694,19 +701,19 @@ function generateWA(){
     if(res.status!=='ok')return;
     if(res.salesman)slmList=res.salesman;
     var map={};(res.data||[]).forEach(function(d){map[d.kode]=d;});
-    var tot={giro:0,transfer:0,qris:0,tokoQris:0,mb:0,nonmb:0,atmBca:0,brilink:0,inna:0,bsi:0,sisaTunai:0};
+    var tot={giro:0,transfer:0,qris:0,tokoQris:0,mb:0,nonmb:0,atmBca:0,brilink:0,inna:0,bsi:0,mandiri:0,sisaTunai:0};
     var errorNames=[],pendingNames=[],validCount=0;
-    var fields=['giro','transfer','qris','tokoQris','mb','nonmb','atmBca','brilink','inna','bsi','sisaTunai'];
+    var fields=['giro','transfer','qris','tokoQris','mb','nonmb','atmBca','brilink','inna','bsi','mandiri','sisaTunai'];
     slmList.forEach(function(slm){
       var d=map[slm.kode];
       if(!d){pendingNames.push(slm.kode);return;}
       var tunai=(parseFloat(d.mb)||0)+(parseFloat(d.nonmb)||0);
-      var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.inna)||0)+(parseFloat(d.bsi)||0)+(parseFloat(d.sisaTunai)||0);
+      var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.inna)||0)+(parseFloat(d.bsi)||0)+(parseFloat(d.mandiri)||0)+(parseFloat(d.sisaTunai)||0);
       if(tunai===setor){validCount++;fields.forEach(function(k){tot[k]+=parseFloat(d[k])||0;});}
       else{errorNames.push(slm.kode);}
     });
     var tunai=tot.mb+tot.nonmb;
-    var setor=tot.atmBca+tot.brilink+tot.inna+tot.bsi+tot.sisaTunai;
+    var setor=tot.atmBca+tot.brilink+tot.inna+tot.bsi+tot.mandiri+tot.sisaTunai;
     var totalCol=tot.giro+tot.transfer+tot.qris+tunai;
     var out='Laporan Collection\n\nHasil Collection Supervisor :\nTanggal : '+fmtTglLong(tgl)+'\nHasil collection ('+validCount+' Salesman) : '+fmtRp(totalCol)+
       '\n\nGiro         : '+fmtRp(tot.giro)+
@@ -717,6 +724,7 @@ function generateWA(){
       '\nSetor BRILink        : '+fmtRp(tot.brilink)+
       '\nSetor ATM INNA     : '+fmtRp(tot.inna)+
       '\nSetor ATM/Link BSI : '+fmtRp(tot.bsi)+
+      '\nSetor ATM MANDIRI  : '+fmtRp(tot.mandiri)+
       '\nSisa Tunai ke SPO : '+fmtRp(tot.sisaTunai);
     var issues=[].concat(
       pendingNames.map(function(c){return '\u2022 '+c+' (belum lapor)';}),
