@@ -212,10 +212,17 @@ header p{font-size:11px;color:var(--muted);}
           <div class="field-preview" id="pv_transfer"></div>
         </div>
         <div class="divider-lbl qris-lbl">&#128243; QRIS</div>
-        <div class="field-group">
-          <label style="color:var(--qris)">QRIS (Rp)</label>
-          <input type="number" id="f_qris" placeholder="0" class="qris-inp" oninput="previewRp('f_qris','pv_qris')">
-          <div class="field-preview" id="pv_qris"></div>
+        <div class="sub-grid">
+          <div class="field-group">
+            <label style="color:var(--qris)">QRIS (Rp)</label>
+            <input type="number" id="f_qris" placeholder="0" class="qris-inp" oninput="previewRp('f_qris','pv_qris')">
+            <div class="field-preview" id="pv_qris"></div>
+          </div>
+          <div class="field-group">
+            <label style="color:var(--qris)">Jumlah Toko QRIS</label>
+            <input type="number" id="f_tokoQris" placeholder="0" class="qris-inp" oninput="previewToko()">
+            <div class="field-preview" id="pv_tokoQris"></div>
+          </div>
         </div>
         <div class="divider-lbl">Tunai</div>
         <div class="sub-grid">
@@ -240,6 +247,16 @@ header p{font-size:11px;color:var(--muted);}
           <label>Setor BRILink (Rp)</label>
           <input type="number" id="f_brilink" placeholder="0" oninput="previewRp('f_brilink','pv_brilink')">
           <div class="field-preview" id="pv_brilink"></div>
+        </div>
+        <div class="field-group">
+          <label>Setor ATM INNA (Rp)</label>
+          <input type="number" id="f_inna" placeholder="0" oninput="previewRp('f_inna','pv_inna')">
+          <div class="field-preview" id="pv_inna"></div>
+        </div>
+        <div class="field-group">
+          <label>Setor ATM/Link BSI (Rp)</label>
+          <input type="number" id="f_bsi" placeholder="0" oninput="previewRp('f_bsi','pv_bsi')">
+          <div class="field-preview" id="pv_bsi"></div>
         </div>
         <div class="field-group">
           <label>Sisa Tunai ke SPO (Rp)</label>
@@ -382,7 +399,7 @@ header p{font-size:11px;color:var(--muted);}
 
 <script>
 // ─── KONFIGURASI ────────────────────────────────────
-var SHEET_URL='https://script.google.com/macros/s/AKfycbxrEuhDbFBglXNGgCuusQvesEBwe3q3Uvsdy3CeuK2T1Us2jD9K8RgGUMc_XciIPTc1/exec';
+var SHEET_URL='https://script.google.com/macros/s/AKfycby8RAUoZ9tbKpGhOUC4EJWgY0ZfFO8R1b96yfXCqKjpwYD6sAK3uKMsV1iIM8i8Qt7m/exec';
 // ────────────────────────────────────────────────────
 
 var currentRole=null,currentCode=null,currentNama=null;
@@ -479,7 +496,7 @@ function switchTab(n){
 // VALIDASI
 function runValidate(d,vmsgId,onValid){
   var tunai=d.mb+d.nonmb;
-  var setor=d.atmBca+d.brilink+d.sisaTunai;
+  var setor=d.atmBca+d.brilink+d.inna+d.bsi+d.sisaTunai;
   var totalCol=d.giro+d.transfer+d.qris+tunai;
   var totalSetor=d.giro+d.transfer+d.qris+setor;
   var vmsg=document.getElementById(vmsgId);
@@ -497,7 +514,7 @@ function runValidate(d,vmsgId,onValid){
 // SALESMAN KIRIM
 function slmValidate(){
   var d={};
-  ['giro','transfer','qris','mb','nonmb','atmBca','brilink','sisaTunai'].forEach(function(k){
+  ['giro','transfer','qris','tokoQris','mb','nonmb','atmBca','brilink','inna','bsi','sisaTunai'].forEach(function(k){
     d[k]=parseFloat(document.getElementById('f_'+k).value)||0;
   });
   d.tgl=document.getElementById('slmTgl').value||todayStr();
@@ -508,8 +525,9 @@ function slmValidate(){
     btn.textContent='\u23f3 Mengirim...';btn.disabled=true;
     vmsg.className='vmsg info';vmsg.textContent='\u23f3 Mengirim data ke server...';
     var params={action:'saveData',kode:data.kode,nama:data.nama,tgl:data.tgl,
-      giro:data.giro,transfer:data.transfer,qris:data.qris,
-      mb:data.mb,nonmb:data.nonmb,atmBca:data.atmBca,brilink:data.brilink,sisaTunai:data.sisaTunai};
+      giro:data.giro,transfer:data.transfer,qris:data.qris,tokoQris:data.tokoQris,
+      mb:data.mb,nonmb:data.nonmb,atmBca:data.atmBca,brilink:data.brilink,
+      inna:data.inna,bsi:data.bsi,sisaTunai:data.sisaTunai};
     apiCall(params)
     .then(function(res){
       btn.textContent='\u23f3 Validasi & Kirim';btn.disabled=false;
@@ -552,9 +570,9 @@ function renderSpv(data,tgl){
   var list=document.getElementById('slmStatusList');
   list.innerHTML='';
   var map={};data.forEach(function(d){map[d.kode]=d;});
-  var tot={giro:0,transfer:0,qris:0,mb:0,nonmb:0,atmBca:0,brilink:0,sisaTunai:0};
+  var tot={giro:0,transfer:0,qris:0,tokoQris:0,mb:0,nonmb:0,atmBca:0,brilink:0,inna:0,bsi:0,sisaTunai:0};
   var countValid=0,errorNames=[],pendingNames=[];
-  var fields=['giro','transfer','qris','mb','nonmb','atmBca','brilink','sisaTunai'];
+  var fields=['giro','transfer','qris','tokoQris','mb','nonmb','atmBca','brilink','inna','bsi','sisaTunai'];
 
   slmList.forEach(function(slm){
     var d=map[slm.kode];
@@ -565,7 +583,7 @@ function renderSpv(data,tgl){
       row.style.cursor='default';
     } else {
       var tunai=(parseFloat(d.mb)||0)+(parseFloat(d.nonmb)||0);
-      var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.sisaTunai)||0);
+      var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.inna)||0)+(parseFloat(d.bsi)||0)+(parseFloat(d.sisaTunai)||0);
       var totalCol=(parseFloat(d.giro)||0)+(parseFloat(d.transfer)||0)+(parseFloat(d.qris)||0)+tunai;
       if(tunai===setor){
         countValid++;
@@ -583,7 +601,7 @@ function renderSpv(data,tgl){
   });
 
   var tunaiTot=tot.mb+tot.nonmb;
-  var setorTot=tot.atmBca+tot.brilink+tot.sisaTunai;
+  var setorTot=tot.atmBca+tot.brilink+tot.inna+tot.bsi+tot.sisaTunai;
   var totalCol=tot.giro+tot.transfer+tot.qris+tunaiTot;
   var selisih=tunaiTot-setorTot;
   var total=slmList.length;
@@ -599,6 +617,8 @@ function renderSpv(data,tgl){
     '<tr><td colspan="2" style="padding:4px 0"><hr style="border-color:var(--border)"></td></tr>'+
     '<tr><td>Setor ATM BCA</td><td>'+fmtRp(tot.atmBca)+'</td></tr>'+
     '<tr><td>Setor BRILink</td><td>'+fmtRp(tot.brilink)+'</td></tr>'+
+    '<tr><td>Setor ATM INNA</td><td>'+fmtRp(tot.inna)+'</td></tr>'+
+    '<tr><td>Setor ATM/Link BSI</td><td>'+fmtRp(tot.bsi)+'</td></tr>'+
     '<tr><td>Sisa Tunai ke SPO</td><td>'+fmtRp(tot.sisaTunai)+'</td></tr>'+
     '<tr><td><b>Total Setor+Sisa</b></td><td><b>'+fmtRp(setorTot)+'</b></td></tr>'+
     (selisih!==0?'<tr class="tr-warn"><td>\u26a0 SELISIH TUNAI</td><td>'+fmtRp(Math.abs(selisih))+'</td></tr>':'');
@@ -619,7 +639,7 @@ function lihatRincian(kode,nama,tgl){
   var d=lastDataMap[kode];
   if(!d)return;
   var tunai=(parseFloat(d.mb)||0)+(parseFloat(d.nonmb)||0);
-  var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.sisaTunai)||0);
+  var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.inna)||0)+(parseFloat(d.bsi)||0)+(parseFloat(d.sisaTunai)||0);
   var qris=parseFloat(d.qris)||0;
   var totalCol=(parseFloat(d.giro)||0)+(parseFloat(d.transfer)||0)+qris+tunai;
   var valid=(tunai===setor);
@@ -641,12 +661,15 @@ function lihatRincian(kode,nama,tgl){
     '<div class="r-item"><div class="lbl">Giro</div><div class="val">'+fmtRp(d.giro)+'</div></div>'+
     '<div class="r-item"><div class="lbl">Transfer</div><div class="val">'+fmtRp(d.transfer)+'</div></div>'+
     '<div class="r-item r-qris"><div class="lbl">&#128243; QRIS</div><div class="val">'+fmtRp(qris)+'</div></div>'+
+    '<div class="r-item r-qris"><div class="lbl">Jumlah Toko QRIS</div><div class="val">'+(d.tokoQris||0)+' toko</div></div>'+
     '<div class="r-item"><div class="lbl">MB</div><div class="val">'+fmtRp(d.mb)+'</div></div>'+
     '<div class="r-item"><div class="lbl">Non MB</div><div class="val">'+fmtRp(d.nonmb)+'</div></div>'+
     '<div class="r-item"><div class="lbl">Total Tunai (MB+Non MB)</div><div class="val">'+fmtRp(tunai)+'</div></div>'+
     '<div class="r-divider"></div>'+
     '<div class="r-item"><div class="lbl">Setor ATM BCA</div><div class="val">'+fmtRp(d.atmBca)+'</div></div>'+
     '<div class="r-item"><div class="lbl">Setor BRILink</div><div class="val">'+fmtRp(d.brilink)+'</div></div>'+
+    '<div class="r-item"><div class="lbl">Setor ATM INNA</div><div class="val">'+fmtRp(d.inna||0)+'</div></div>'+
+    '<div class="r-item"><div class="lbl">Setor ATM/Link BSI</div><div class="val">'+fmtRp(d.bsi||0)+'</div></div>'+
     '<div class="r-item"><div class="lbl">Sisa Tunai ke SPO</div><div class="val">'+fmtRp(d.sisaTunai)+'</div></div>'+
     '<div class="r-item"><div class="lbl">Total Setor+Sisa</div><div class="val">'+fmtRp(setor)+'</div></div>'+
     (valid?'':'<div class="r-item r-warn"><div class="lbl">\u26a0 SELISIH TUNAI</div><div class="val">'+fmtRp(selisih)+'</div></div>');
@@ -671,19 +694,19 @@ function generateWA(){
     if(res.status!=='ok')return;
     if(res.salesman)slmList=res.salesman;
     var map={};(res.data||[]).forEach(function(d){map[d.kode]=d;});
-    var tot={giro:0,transfer:0,qris:0,mb:0,nonmb:0,atmBca:0,brilink:0,sisaTunai:0};
+    var tot={giro:0,transfer:0,qris:0,tokoQris:0,mb:0,nonmb:0,atmBca:0,brilink:0,inna:0,bsi:0,sisaTunai:0};
     var errorNames=[],pendingNames=[],validCount=0;
-    var fields=['giro','transfer','qris','mb','nonmb','atmBca','brilink','sisaTunai'];
+    var fields=['giro','transfer','qris','tokoQris','mb','nonmb','atmBca','brilink','inna','bsi','sisaTunai'];
     slmList.forEach(function(slm){
       var d=map[slm.kode];
       if(!d){pendingNames.push(slm.kode);return;}
       var tunai=(parseFloat(d.mb)||0)+(parseFloat(d.nonmb)||0);
-      var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.sisaTunai)||0);
+      var setor=(parseFloat(d.atmBca)||0)+(parseFloat(d.brilink)||0)+(parseFloat(d.inna)||0)+(parseFloat(d.bsi)||0)+(parseFloat(d.sisaTunai)||0);
       if(tunai===setor){validCount++;fields.forEach(function(k){tot[k]+=parseFloat(d[k])||0;});}
       else{errorNames.push(slm.kode);}
     });
     var tunai=tot.mb+tot.nonmb;
-    var setor=tot.atmBca+tot.brilink+tot.sisaTunai;
+    var setor=tot.atmBca+tot.brilink+tot.inna+tot.bsi+tot.sisaTunai;
     var totalCol=tot.giro+tot.transfer+tot.qris+tunai;
     var out='Laporan Collection\n\nHasil Collection Supervisor :\nTanggal : '+fmtTglLong(tgl)+'\nHasil collection ('+validCount+' Salesman) : '+fmtRp(totalCol)+
       '\n\nGiro         : '+fmtRp(tot.giro)+
@@ -692,6 +715,8 @@ function generateWA(){
       '\n\nTunai\n- MB          = '+fmtRp(tot.mb)+'\n- Non MB = '+fmtRp(tot.nonmb)+
       '\n\nSetor ATM BCA      : '+fmtRp(tot.atmBca)+
       '\nSetor BRILink        : '+fmtRp(tot.brilink)+
+      '\nSetor ATM INNA     : '+fmtRp(tot.inna)+
+      '\nSetor ATM/Link BSI : '+fmtRp(tot.bsi)+
       '\nSisa Tunai ke SPO : '+fmtRp(tot.sisaTunai);
     var issues=[].concat(
       pendingNames.map(function(c){return '\u2022 '+c+' (belum lapor)';}),
@@ -794,6 +819,7 @@ function gantiPassSpv(){
 }
 
 document.getElementById('modalSlm').addEventListener('click',function(e){if(e.target===this)closeModalSlm();});
+function previewToko(){var v=parseInt(document.getElementById('f_tokoQris').value)||0;document.getElementById('pv_tokoQris').textContent=v>0?v+' toko':'';}	
 </script>
 </body>
 </html>
